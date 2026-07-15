@@ -1,0 +1,26 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / JetBrains
+.idea/
+
+# Secrets & environment
+**/appsettings.Development.json
+
+# Publish output
+publish/
+*.publishsettings
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log

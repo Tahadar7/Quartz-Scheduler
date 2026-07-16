@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="QuartzScheduler.API/QuartzScheduler.API.csproj" />
+  <Project Path="QuartzScheduler.Data/QuartzScheduler.Data.csproj" />
   <Project Path="QuartzScheduler.Shared/QuartzScheduler.Shared.csproj" />
+  <Project Path="QuartzScheduler.UI/QuartzScheduler.UI.csproj" />
 </Solution>

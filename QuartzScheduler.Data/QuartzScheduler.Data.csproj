@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\QuartzScheduler.Shared\QuartzScheduler.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

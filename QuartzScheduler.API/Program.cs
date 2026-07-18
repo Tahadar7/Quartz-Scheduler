@@ -1,7 +1,9 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using QuartzScheduler.API.Middleware;
+using QuartzScheduler.API.Validators;
 using QuartzScheduler.Data.Context;
 using QuartzScheduler.Data.Repositories;
-using QuartzScheduler.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IJobHistoryRepository, JobHistoryRepository>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateEmailJobRequestValidator>();
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();

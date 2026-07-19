@@ -22,10 +22,20 @@ public class JobHistoryRepository(ApplicationDbContext context) : IJobHistoryRep
             .ToListAsync(ct);
     }
 
-    public async Task<IEnumerable<JobExecutionHistory>> GetRecentAsync(int take = 50, CancellationToken ct = default) =>
-        await context.JobExecutionHistory
+    public async Task<IEnumerable<JobExecutionHistory>> GetRecentAsync(int take = 50, CancellationToken ct = default) {
+        return await context.JobExecutionHistory
             .AsNoTracking()
             .OrderByDescending(h => h.ExecutedAt)
             .Take(take)
             .ToListAsync(ct);
+    }
+
+public async Task<JobExecutionHistory?> GetLatestByJobIdAsync(int jobId, CancellationToken ct = default) {
+    return await context.JobExecutionHistory
+        .AsNoTracking()
+        .Where(h => h.JobId == jobId)
+        .OrderByDescending(h => h.ExecutedAt)
+        .FirstOrDefaultAsync(ct);
+}
+
 }

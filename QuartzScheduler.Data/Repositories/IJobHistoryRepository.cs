@@ -14,4 +14,5 @@ public interface IJobHistoryRepository
 
     // recent runs across all jobs, newest first
     Task<IEnumerable<JobExecutionHistory>> GetRecentAsync(int take = 50, CancellationToken ct = default);
+    Task<JobExecutionHistory?> GetLatestByJobIdAsync(int jobId, CancellationToken ct = default);
 }

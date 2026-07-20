@@ -8,7 +8,11 @@ using QuartzScheduler.Shared.DTOs.Jobs;
 namespace QuartzScheduler.API.Services;
 public class JobService(
     IJobRepository jobRepository,
-    IJobHistoryRepository historyRepository) : IJobService
+    IJobHistoryRepository historyRepository,
+    IValidator<CreateEmailJobRequest> createEmailValidator,
+    IValidator<CreateHttpJobRequest> createHttpValidator,
+    IValidator<UpdateEmailJobRequest> updateEmailValidator,
+    IValidator<UpdateHttpJobRequest> updateHttpValidator) : IJobService
 {
     public async Task<IEnumerable<JobSummaryResponse>> GetAllAsync(CancellationToken ct = default)
     {
@@ -37,7 +41,7 @@ public class JobService(
         return job?.Adapt<HttpJobResponse>();
     }
 
-    public async Task<EmailJobResponse> CreateEmailJobAsync(IValidator<CreateEmailJobRequest> createEmailValidator,CreateEmailJobRequest request, CancellationToken ct = default)
+    public async Task<EmailJobResponse> CreateEmailJobAsync(CreateEmailJobRequest request, CancellationToken ct = default)
     {
         await createEmailValidator.ValidateAndThrowAsync(request, ct);
 
@@ -51,7 +55,7 @@ public class JobService(
         return job.Adapt<EmailJobResponse>();
     }
 
-    public async Task<HttpJobResponse> CreateHttpJobAsync(IValidator<CreateHttpJobRequest> createHttpValidator,CreateHttpJobRequest request, CancellationToken ct = default)
+    public async Task<HttpJobResponse> CreateHttpJobAsync(CreateHttpJobRequest request, CancellationToken ct = default)
     {
         await createHttpValidator.ValidateAndThrowAsync(request, ct);
 
@@ -65,7 +69,7 @@ public class JobService(
         return job.Adapt<HttpJobResponse>();
     }
 
-    public async Task<EmailJobResponse?> UpdateEmailJobAsync(IValidator<UpdateEmailJobRequest> updateEmailValidator, int id, UpdateEmailJobRequest request, CancellationToken ct = default)
+    public async Task<EmailJobResponse?> UpdateEmailJobAsync(int id, UpdateEmailJobRequest request, CancellationToken ct = default)
     {
         await updateEmailValidator.ValidateAndThrowAsync(request, ct);
 
@@ -84,7 +88,7 @@ public class JobService(
         return job.Adapt<EmailJobResponse>();
     }
 
-    public async Task<HttpJobResponse?> UpdateHttpJobAsync(IValidator<UpdateHttpJobRequest> updateHttpValidator, int id, UpdateHttpJobRequest request, CancellationToken ct = default)
+    public async Task<HttpJobResponse?> UpdateHttpJobAsync(int id, UpdateHttpJobRequest request, CancellationToken ct = default)
     {
         await updateHttpValidator.ValidateAndThrowAsync(request, ct);
 

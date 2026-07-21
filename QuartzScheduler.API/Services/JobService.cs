@@ -1,6 +1,8 @@
 using FluentValidation;
 using Mapster;
+using Quartz;
 using QuartzScheduler.API.Exceptions;
+using QuartzScheduler.API.Scheduling;
 using QuartzScheduler.Data.Entities;
 using QuartzScheduler.Data.Repositories;
 using QuartzScheduler.Shared.DTOs.Jobs;
@@ -9,6 +11,7 @@ namespace QuartzScheduler.API.Services;
 public class JobService(
     IJobRepository jobRepository,
     IJobHistoryRepository historyRepository,
+    ISchedulerService schedulerService,
     IValidator<CreateEmailJobRequest> createEmailValidator,
     IValidator<CreateHttpJobRequest> createHttpValidator,
     IValidator<UpdateEmailJobRequest> updateEmailValidator,
@@ -51,6 +54,7 @@ public class JobService(
 
         var job = request.Adapt<EmailJob>();
         await jobRepository.AddAsync(job, ct);
+        await schedulerService.ScheduleAsync(job, ct);
 
         return job.Adapt<EmailJobResponse>();
     }
@@ -65,6 +69,7 @@ public class JobService(
 
         var job = request.Adapt<HttpJob>();
         await jobRepository.AddAsync(job, ct);
+        await schedulerService.ScheduleAsync(job, ct);
 
         return job.Adapt<HttpJobResponse>();
     }
@@ -84,6 +89,7 @@ public class JobService(
 
         request.Adapt(job);   // maps onto the tracked entity in place
         await jobRepository.UpdateAsync(job, ct);
+        await schedulerService.RescheduleAsync(job, ct); 
 
         return job.Adapt<EmailJobResponse>();
     }
@@ -103,6 +109,7 @@ public class JobService(
 
         request.Adapt(job);
         await jobRepository.UpdateAsync(job, ct);
+        await schedulerService.RescheduleAsync(job, ct); 
 
         return job.Adapt<HttpJobResponse>();
     }
@@ -114,6 +121,7 @@ public class JobService(
             return false;
         }
 
+        await schedulerService.UnscheduleAsync(job,ct);     // unschedule before deletion
         await jobRepository.DeleteAsync(job, ct);
 
         return true;

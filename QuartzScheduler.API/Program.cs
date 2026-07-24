@@ -2,6 +2,7 @@ using FluentValidation;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
+using QuartzScheduler.API.Options;
 using QuartzScheduler.API.Middleware;
 using QuartzScheduler.API.Services;
 using QuartzScheduler.API.Validators;
@@ -32,6 +33,9 @@ builder.Services.AddScoped<IJobHistoryRepository, JobHistoryRepository>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<ISchedulerService,SchedulerService>();
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateEmailJobRequestValidator>();
 // scans the assembly for IRegister implementations and applies them

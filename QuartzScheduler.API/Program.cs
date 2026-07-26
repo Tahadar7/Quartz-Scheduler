@@ -23,8 +23,12 @@ builder.Services.AddQuartz();
 builder.Services.AddQuartzHostedService(options =>
 {
     options.WaitForJobsToComplete = true;
-}
-);
+});
+
+builder.Services.AddHttpClient<IHttpApiService, HttpApiService>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

@@ -28,8 +28,4 @@
     <ProjectReference Include="..\QuartzScheduler.Shared\QuartzScheduler.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="NewFolder\" />
-  </ItemGroup>
-
 </Project>
